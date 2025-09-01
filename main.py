@@ -53,9 +53,10 @@ Manager:
         hint_text: 'Enter Username' 
         pos_hint:{'center_y':0.8}             
         
-    MDIconButton:
+    MDFloatingActionButton:
         icon:'login'
-        pos_hint:{'center_x':0.5,'center_y':0.7}       
+        pos_hint:{'center_x':0.5,'center_y':0.7}    
+        size_hint_x:0.5   
         on_press:app.login() 
         
         
@@ -69,12 +70,14 @@ Manager:
         required: True
         hint_text: 'ENTER MSG'  
         size_hint_y:0.08             
-        pos_hint:{'center_y':0.85}                
+        pos_hint:{'center_y':0.85}       
+                 
 
-    MDIconButton:
+    MDFloatingActionButton:
         id:tb1
         icon:'send'
         pos_hint:{'center_x':0.5,'center_y':0.75}
+        size_hint_x:0.5
         on_press:app.send()
 
 	ScrollView:
@@ -154,6 +157,7 @@ class Demo(MDApp):
     def login(self):
     	try:
     	    number=self.b.get_screen('login').ids.lf1.text
+    	    self.b.get_screen('login').ids.lf1.text=''
     	    if number.strip()=='':
                 toast('PLEASE ENTER NUMBER')
           
@@ -173,7 +177,7 @@ class Demo(MDApp):
   
     def send(self):
         try:
-            msg=self.b.get_screen('home').ids.tf1.text
+            msg=self.b.get_screen('home').ids.tf1.text.strip()
             tim=str(f'{time.strftime("%d-%m-%Y")}\n{time.strftime("%H:%M:%S")}')
             num=self.number1
             jso={'msg':msg,'time':tim,'number':num}
@@ -212,8 +216,8 @@ class Demo(MDApp):
         try:
             s1=self.b.get_screen('home').ids.b1         
             for k,v in data.items():                         
-	            c1=MDCard(adaptive_height=True,md_bg_color= (0.80, 0.96, 0.76, 1) if v.get('number')==self.number1 else (0.95, 0.95, 0.95, 1),radius=[0,0,0,0],size_hint_x=0.7,pos_hint={'right':1} if v.get('number') == self.number1 else {'x':0})
-	            l1=MDLabel(text=str(v.get('msg')),adaptive_height=True)
+	            c1=MDCard(adaptive_height=True,md_bg_color= (0.80, 0.96, 0.76, 1) if v.get('number')==self.number1 else (0.95, 0.95, 0.95, 1),radius=[0,0,0,0],size_hint_x=0.95,pos_hint={'right':1} if v.get('number') == self.number1 else {'x':0})
+	            l1=MDLabel(text=str(v.get('msg')),adaptive_height=True,font_name= "/storage/emulated/0/NotoSansDevanagari-Regular.ttf")
 	            l2=MDLabel(text=str(v.get('time')),adaptive_height=True,halign='right')
 	            l3=MDLabel(text=f"send_by:-{v.get('number')}",adaptive_height=True,halign='left')
 	            b1 = MDRaisedButton(
