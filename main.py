@@ -25,6 +25,7 @@ from kivy.utils import platform
 from android.storage import primary_external_storage_path
 from kivy.properties import StringProperty
 from kivy.core.clipboard import Clipboard
+from kivy.storage.jsonstore import JsonStore
 import os
 import re
 import datetime
@@ -151,7 +152,17 @@ class Demo(MDApp):
         self.api='x3eMg4dzBwIc0olCOwPvU3ogJoM7QKorJRVDwMEQ'
         self.tu=f'{self.url}?auth={self.api}'
         self.dict={}
-        
+        self.store=JsonStore('user.json')
+        if self.store.exists('user'):
+            Clock.schedule_once(lambda x: threading.Thread(target=self.on,daemon=True).start(),2)
+            u1=self.store.get('user')['username']
+            self.number1=u1
+            self.b.get_screen('home').ids.ndl1.text=f'YOUR USERNAME:- {self.number1}'
+            self.b.current='home'
+            
+        else:
+            self.b.current='login'        
+            
         return self.b				
 			
     def login(self):
@@ -163,12 +174,14 @@ class Demo(MDApp):
           
     	    else:
     	        self.dict={}
+    	        Clock.schedule_once(lambda x: threading.Thread(target=self.on,daemon=True).start(),2)
     	        self.b.get_screen('home').ids.b1.clear_widgets()
     	        self.b.current='home'        
     	        self.b.transition.direction='left'   
     	        self.number1=number
     	        self.b.get_screen('home').ids.ndl1.text=f'YOUR USERNAME:- {number}'
-    	        Clock.schedule_once(lambda x: threading.Thread(target=self.on,daemon=True).start(),2)
+    	        self.store.put('user',username=number)
+    	        
     	        
                 
                 
@@ -245,6 +258,8 @@ class Demo(MDApp):
             self.b.transition.direction='right'
             self.b.get_screen('home').ids.nd1.set_state('close')
             self.b.get_screen('home').ids.b1.clear_widgets()
+            if self.store.exists('user'):
+                self.store.delete('user')
             
             
         except:
