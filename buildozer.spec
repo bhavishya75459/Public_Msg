@@ -4,10 +4,10 @@
 title = PUBLIC_MESSANGER
 
 # (str) Package name
-package.name = mahakal_baba_ki_jai_1
+package.name = mahakal_baba_ki_jai_23
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.jai__jai_mahakal_bholenath_baba_1
+package.domain = com.jai__jai_mahakal_bholenath_baba_23
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -159,8 +159,6 @@ android.accept_sdk_license = True
 
 # (str) Android app theme, default is ok for Kivy-based app
 # android.apptheme = "@android:style/Theme.NoTitleBar"
-# (str) Activity's android:windowSoftInputMode
-android.windowSoftInputMode = adjustResize
 
 # (list) Pattern to whitelist for the whole project
 #android.whitelist =
