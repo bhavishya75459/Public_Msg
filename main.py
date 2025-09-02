@@ -57,7 +57,7 @@ Manager:
     MDFloatingActionButton:
         icon:'login'
         pos_hint:{'center_x':0.5,'center_y':0.7}    
-        size_hint_x:0.5   
+        size_hint_x:0.5 
         on_press:app.login() 
         
         
@@ -70,21 +70,22 @@ Manager:
         helper_text: 'Required'
         required: True
         hint_text: 'ENTER MSG'  
-        size_hint_y:0.08             
-        pos_hint:{'center_y':0.85}       
+        size_hint_y:0.05 
+        size_hint_x:0.6          
+        pos_hint:{'center_y':0.05,'center_x':0.35}       
                  
 
     MDFloatingActionButton:
         id:tb1
         icon:'send'
-        pos_hint:{'center_x':0.5,'center_y':0.75}
-        size_hint_x:0.5
+        pos_hint:{'center_x':0.8,'center_y':0.05}
+        size_hint_x:0.2
         on_press:app.send()
 
 	ScrollView:
 	    id:s1
-		size_hint_y:0.6	   	   
-	    pos_hint:{'center_y':0.4}
+		size_hint_y:0.8	   
+	    pos_hint:{'center_y':0.5}
 	      	    
 	    MDBoxLayout:
 	        id:b1
@@ -191,11 +192,14 @@ class Demo(MDApp):
     def send(self):
         try:
             msg=self.b.get_screen('home').ids.tf1.text.strip()
-            tim=str(f'{time.strftime("%d-%m-%Y")}\n{time.strftime("%H:%M:%S")}')
-            num=self.number1
-            jso={'msg':msg,'time':tim,'number':num}
-            requests.post(self.tu,json=jso)
-            self.b.get_screen('home').ids.tf1.text=''
+            if msg.strip()=='':
+                toast('PLEASE ENTER MSG FIRST')
+            else:
+                tim=str(f'{time.strftime("%d-%m-%Y")}\n{time.strftime("%H:%M:%S")}')
+                num=self.number1
+                jso={'msg':msg,'time':tim,'number':num}
+                requests.post(self.tu,json=jso)
+                self.b.get_screen('home').ids.tf1.text=''
             
         except Exception as e:
             toast(str(e))		
@@ -232,7 +236,7 @@ class Demo(MDApp):
 	            c1=MDCard(adaptive_height=True,md_bg_color= (0.80, 0.96, 0.76, 1) if v.get('number')==self.number1 else (0.95, 0.95, 0.95, 1),radius=[0,0,0,0],size_hint_x=0.95,pos_hint={'right':1} if v.get('number') == self.number1 else {'x':0})
 	            l1=MDLabel(text=str(v.get('msg')),adaptive_height=True)
 	            l2=MDLabel(text=str(v.get('time')),adaptive_height=True,halign='right')
-	            l3=MDLabel(text=f"send_by:-{v.get('number')}",adaptive_height=True,halign='left')
+	            l3=MDLabel(text=f"send_by:-{v.get('number')}" if v.get('number') != self.number1 else f"send_by:- YOU",adaptive_height=True,halign='left')
 	            b1 = MDRaisedButton(
     text='copy',
     on_release=lambda btn, text=v.get('msg'): self.copy(text)
