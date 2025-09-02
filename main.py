@@ -230,7 +230,7 @@ class Demo(MDApp):
             s1=self.b.get_screen('home').ids.b1         
             for k,v in data.items():                         
 	            c1=MDCard(adaptive_height=True,md_bg_color= (0.80, 0.96, 0.76, 1) if v.get('number')==self.number1 else (0.95, 0.95, 0.95, 1),radius=[0,0,0,0],size_hint_x=0.95,pos_hint={'right':1} if v.get('number') == self.number1 else {'x':0})
-	            l1=MDLabel(text=str(v.get('msg')),adaptive_height=True,font_name= "/storage/emulated/0/NotoSansDevanagari-Regular.ttf")
+	            l1=MDLabel(text=str(v.get('msg')),adaptive_height=True)
 	            l2=MDLabel(text=str(v.get('time')),adaptive_height=True,halign='right')
 	            l3=MDLabel(text=f"send_by:-{v.get('number')}",adaptive_height=True,halign='left')
 	            b1 = MDRaisedButton(
