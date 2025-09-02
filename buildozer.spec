@@ -159,6 +159,8 @@ android.accept_sdk_license = True
 
 # (str) Android app theme, default is ok for Kivy-based app
 # android.apptheme = "@android:style/Theme.NoTitleBar"
+# (str) Activity's android:windowSoftInputMode
+android.windowSoftInputMode = adjustResize
 
 # (list) Pattern to whitelist for the whole project
 #android.whitelist =
