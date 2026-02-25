@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = PUBLIC_MESSANGER
+title = admobapp
 
 # (str) Package name
-package.name = mahakal_baba_ki_jai_23
+package.name = addmob
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.jai__jai_mahakal_bholenath_baba_23
+package.domain = org.test
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,requests,android,pyjnius,ffpyplayer
+requirements = python3,kivy,kivymd,requests,android,jnius
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -72,7 +72,8 @@ osx.kivy_version = 1.9.1
 #
 # Android specific
 #
-
+#Admob
+android.gradle_dependencies = 'com.google.android.gms:play-services-ads:22.3.0'
 # (bool) Indicate if the application should be fullscreen or not
 fullscreen = 0
 
