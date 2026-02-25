@@ -73,7 +73,7 @@ osx.kivy_version = 1.9.1
 # Android specific
 #
 #Admob
-android.gradle_dependencies = 'com.google.android.gms:play-services-ads:22.3.0'
+#android.gradle_dependencies = 'com.google.android.gms:play-services-ads:22.3.0'
 # (bool) Indicate if the application should be fullscreen or not
 fullscreen = 0
 
