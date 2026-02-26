@@ -20,22 +20,19 @@ jobs:
           sudo mkdir -p /usr/local/android-sdk/cmdline-tools
           sudo unzip -o cmdline-tools.zip -d /usr/local/android-sdk/cmdline-tools/
           sudo mv /usr/local/android-sdk/cmdline-tools/cmdline-tools /usr/local/android-sdk/cmdline-tools/latest
+          sudo chown -R $USER /usr/local/android-sdk
           export ANDROID_SDK_ROOT=/usr/local/android-sdk
           export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+          echo "ANDROID_SDK_ROOT=/usr/local/android-sdk" >> $GITHUB_ENV
+          echo "/usr/local/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "/usr/local/android-sdk/platform-tools" >> $GITHUB_PATH
 
       - name: Build APK with Buildozer
         uses: digreatbrian/buildozer-action@v2
+        env:
+          ANDROID_SDK_ROOT: /usr/local/android-sdk
         with:
           buildozer-cmd: buildozer -v android debug
-          work-dir: .  # Directory containing main.py and buildozer.spec
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: kivy-apk
-          path: ./bin/*.apk
+          work-dir: .
