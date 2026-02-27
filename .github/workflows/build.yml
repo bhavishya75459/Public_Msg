@@ -18,6 +18,13 @@ jobs:
         with:
           python-version: '3.10'
 
+      # Yeh step sabse important hai jo aapki error fix karega
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       - name: Install System Dependencies
         run: |
           sudo apt update
@@ -29,7 +36,7 @@ jobs:
             zlib1g-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev \
             libsdl2-ttf-dev libportmidi-dev libswscale-dev \
             libavformat-dev libavcodec-dev ffmpeg autoconf automake \
-            libtool pkg-config cmake unzip zip openjdk-17-jdk
+            libtool pkg-config cmake unzip zip
 
       - name: Install Buildozer and Cython
         run: |
@@ -37,16 +44,9 @@ jobs:
           python3 -m pip install --user buildozer cython==0.29.33
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Force Accept Android Licenses
-        run: |
-          # SDK Manager se saare licenses manually accept karna
-          mkdir -p $HOME/.android
-          touch $HOME/.android/repositories.cfg
-          yes | sdkmanager --licenses || true
-
       - name: Build APK with Buildozer
         run: |
-          # APP_ACCEPT_SDK_LICENSE force karta hai auto-accept ke liye
+          # buildozer automatically SDK download aur license handle kar leta hai
           yes | buildozer -v android debug
         env:
           BUILDOZER_ALLOW_ORG_TEST_DOMAIN: 1
