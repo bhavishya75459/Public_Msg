@@ -3,6 +3,7 @@ name: Build Kivy APK
 on:
   push:
     branches: [main]
+  workflow_dispatch: # Isse aap manually bhi build start kar sakte hain
 
 jobs:
   build:
@@ -12,15 +13,63 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer
-        uses: digreatbrian/buildozer-action@v2
+      - name: Install System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential \
+            git \
+            python3-dev \
+            python3-pip \
+            ffmpeg \
+            libsdl2-dev \
+            libsdl2-image-dev \
+            libsdl2-mixer-dev \
+            libsdl2-ttf-dev \
+            libportmidi-dev \
+            libswscale-dev \
+            libavformat-dev \
+            libavcodec-dev \
+            zlib1g-dev \
+            libgdbm-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libdb5.3-dev \
+            libexpat1-dev \
+            liblzma-dev \
+            libffi-dev \
+            libssl-dev \
+            autoconf \
+            automake \
+            libtool \
+            pkg-config \
+            cmake \
+            unzip \
+            zip \
+            openjdk-17-jdk
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          buildozer-cmd: buildozer -v android debug
-          work-dir: .  # Directory containing main.py and buildozer.spec
+          python-version: '3.10'
+
+      - name: Install Buildozer and Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.33 git+https://github.com/kivy/kivy.git@master
+
+      - name: Build APK with Buildozer
+        # Hum direct action ke bajaye command line use karenge for better control
+        run: |
+          # SDK licenses accept karne ke liye
+          yes | buildozer android debug
+        env:
+          # Isse build faster aur reliable hoga
+          BUILDOZER_ALLOW_ORG_TEST_DOMAIN: 1
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: kivy-apk
-          path: ./bin/*.apk
+          name: kivy-app-debug
+          path: bin/*.apk
           
