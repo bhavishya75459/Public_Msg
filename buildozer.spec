@@ -6,32 +6,31 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttf,gif,mp4
 version = 0.1
 
-# 'jnius' ki jagah 'pyjnius' use karein
+# Requirements mein pyjnius zaroori hai AdMob ke liye
 requirements = python3, kivy==2.2.1, kivymd, pyjnius, android, pyparsing
 
 orientation = portrait
 fullscreen = 0
 
-# Permissions for AdMob
 android.permissions = INTERNET, ACCESS_NETWORK_STATE, AD_ID
 
-# Stable API levels
-android.api = 33
+# STABLE API LEVELS (Don't use 35 or 36)
+android.api = 34
 android.minapi = 21
-android.sdk = 33
+android.sdk = 34
 android.ndk = 25b
 android.accept_sdk_license = True
 
-# AdMob Meta-data (Test ID)
+# Meta-data for AdMob (Test ID)
 android.meta_data = com.google.android.gms.ads.APPLICATION_ID=ca-app-pub-3940256099942544~3347511713
 
-# Modern Gradle dependencies
+# Dependencies
 android.gradle_dependencies = "com.google.android.gms:play-services-ads:22.4.0", "androidx.appcompat:appcompat:1.6.1", "androidx.core:core:1.9.0"
 
 android.enable_androidx = True
 android.add_compile_options = "sourceCompatibility = 1.8", "targetCompatibility = 1.8"
 
-# Architecture (Sirf arm64 rakha hai build fast karne ke liye)
+# Fast Build ke liye sirf ek architecture
 android.archs = arm64-v8a
 
 p4a.branch = master
