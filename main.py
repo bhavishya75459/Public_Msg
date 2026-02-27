@@ -1,6 +1,10 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.utils import platform
+from jnius import autoclass
+from android.runnable import run_on_ui_thread
+from kivymd.toast import toast as t
+from kivy.core.clipboard import Clipboard
 
 KV = '''
 MDScreen:
@@ -21,21 +25,30 @@ MDScreen:
 # Android AdMob Setup
 if platform == "android":
     try:
-        from jnius import autoclass
-        from android.runnable import run_on_ui_thread
+         AdMobAdapter = autoclass("com.google.ads.mediation.admob.AdMobAdapter")
+         AdSize = autoclass('com.google.android.gms.ads.AdSize')
+         AdRequestBuilder = autoclass('com.google.android.gms.ads.AdRequest$Builder')
+         MobileAds = autoclass('com.google.android.gms.ads.MobileAds')
+         PythonActivity = autoclass('org.kivy.android.PythonActivity')
+         FrameLayoutParams = autoclass('android.widget.FrameLayout$LayoutParams')        
     
-        AdView = autoclass('com.google.android.gms.ads.AdView')
-        AdSize = autoclass('com.google.android.gms.ads.AdSize')
-        AdRequestBuilder = autoclass('com.google.android.gms.ads.AdRequest$Builder')
-        MobileAds = autoclass('com.google.android.gms.ads.MobileAds')
-        PythonActivity = autoclass('org.kivy.android.PythonActivity')
-        FrameLayoutParams = autoclass('android.widget.FrameLayout$LayoutParams')
+        
     except Exception as e:
-        pass
+        t(f'p:-{e}')
+        Clipboard.copy(str(e))
+
+    @run_on_ui_thread
+    def toasts(a,*args):
+        PythonActivity = autoclass('org.kivy.android.PythonActivity')
+        toast=autoclass('android.widget.Toast')
+        string=autoclass('java.lang.String')        
+        c=PythonActivity.mActivity
+        s=string(str(a))
+        toast.makeText(c,s,toast.LENGTH_SHORT).show()
 
     @run_on_ui_thread
     def show_banner():
-        try:
+        try:            
             activity = PythonActivity.mActivity
             MobileAds.initialize(activity)
     
@@ -56,7 +69,8 @@ if platform == "android":
             activity.addContentView(adview, params)
 
         except Exception as e:
-            pass
+            toasts(str(e))
+            Clipboard.copy(str(e))
 class AdApp(MDApp):
     def build(self):
         return Builder.load_string(KV)
